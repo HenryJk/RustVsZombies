@@ -1,9 +1,10 @@
 // Swinging gargantuar: 510
 // Biting dancer: 429
 
+use core::cmp::max;
 use core::cmp::min;
+use core::ffi::c_void;
 
-use std::cmp::max;
 use std::collections::HashSet;
 use std::error::Error;
 use std::intrinsics::transmute;
@@ -11,12 +12,12 @@ use std::time::SystemTime;
 
 use iced_x86::code_asm::*;
 use rand::{seq::SliceRandom, thread_rng};
-use winapi::um::winnt::DLL_PROCESS_ATTACH;
 
 mod calculation;
 mod memory;
 
 use memory::{inject, patch};
+use windows::Win32::{Foundation::HINSTANCE, System::SystemServices::DLL_PROCESS_ATTACH};
 
 const DEBUG: bool = false;
 const SPEEDUP: bool = true;
@@ -772,9 +773,9 @@ fn onboardtick() -> Result<(), Box<dyn Error>> {
 #[no_mangle] // call it "DllMain" in the compiled DLL
 #[allow(unused_variables)]
 pub extern "stdcall" fn DllMain(
-    hinst_dll: winapi::shared::minwindef::HINSTANCE,
-    fdw_reason: winapi::shared::minwindef::DWORD,
-    lpv_reserved: winapi::shared::minwindef::LPVOID,
+    hinst_dll: HINSTANCE,
+    fdw_reason: u32,
+    lpv_reserved: *const c_void,
 ) -> i32 {
     match fdw_reason {
         DLL_PROCESS_ATTACH => {
