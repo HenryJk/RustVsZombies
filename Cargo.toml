@@ -8,7 +8,6 @@ crate-type = ["dylib"]
 
 [dependencies]
 pvz = {git = "https://github.com/HenryJk/PvZLib", branch = "rust"}
-byteorder = "1.4.3"
 iced-x86 = { version = "1.16.0", features = ["code_asm"]}
 rand = "0.8.5"
 

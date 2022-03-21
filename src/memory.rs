@@ -2,7 +2,6 @@
 
 use core::{
     ffi::c_void,
-    mem::zeroed,
     ptr::{copy, null_mut},
 };
 
@@ -20,8 +19,7 @@ pub(crate) unsafe fn change_permission(
     size: usize,
     permission: PAGE_PROTECTION_FLAGS,
 ) {
-    let mut old_perm: PAGE_PROTECTION_FLAGS = zeroed();
-    VirtualProtect(address as *const c_void, size, permission, &mut old_perm);
+    VirtualProtect(address as *const c_void, size, permission, null_mut());
 }
 
 pub(crate) unsafe fn patch(address: u32, buf: &[u8]) {
